@@ -1,54 +1,56 @@
 body {
-  background-color: #ffffff;
+    background-color: #ffffff;
     width: auto;
     height: auto;
 }
 
-#chart{
-        align-items: center;
+#chart {
+    align-items: center;
     width: 1300px;
     height: auto;
 }
 
-#figure{
+#figure {
     margin: 0px auto;
     width: 1200px;
     height: 520px;
     align-items: center;
 }
 
-#chart2{
-    
-        margin-left:45px;
-        width: 1100px;
-        height: auto;
+#chart2 {
+
+    margin-left: 45px;
+    width: 1100px;
+    height: auto;
 }
 
 .axis path,
 .axis line {
-  fill: none;
-  stroke: #D4D8DA;
-  stroke-width: 2px;
-  shape-rendering: crispEdges;
+    fill: none;
+    stroke: #D4D8DA;
+    stroke-width: 2px;
+    shape-rendering: crispEdges;
 }
+
 .lineBlue {
-  fill: none;
-  stroke: #1F77B4;
-  stroke-width: 3px;
-      clip-path: url(#clip);
+    fill: none;
+    stroke: #1F77B4;
+    stroke-width: 3px;
+    clip-path: url(#clip);
 }
+
 .lineScroll {
-  fill: none;
-  stroke: skyblue;
-  stroke-width: 3px;
-      clip-path: url(#clip);
+    fill: none;
+    stroke: skyblue;
+    stroke-width: 3px;
+    clip-path: url(#clip);
 }
 
 .lineGreen {
-  fill: none;
-  stroke: #03C03C;
-  stroke-width: 3px;
-      clip-path: url(#clip);
+    fill: none;
+    stroke: #03C03C;
+    stroke-width: 3px;
+    clip-path: url(#clip);
 }
 
 .grid line {
@@ -59,85 +61,91 @@ body {
 }
 
 .grid path {
-  stroke-width: 0;
-}  
-.bar {
-  fill: gray;
-      clip-path: url(#clip);
+    stroke-width: 0;
+}
 
-   }
-        
+.bar {
+    fill: gray;
+    clip-path: url(#clip);
+
+}
 
 .axisBlue path {
-  display:none ;
+    display: none;
 }
+
 .axisGreen path {
-  display:none; ;
+    display: none;;
 }
 
-
-.axisBlue  {
+.axisBlue {
     fill: none;
     stroke: #1F77B4;
     stroke-dasharray: 6px, 0px;
     shape-rendering: crispEdges;
     stroke-width: 1px;
-    
+
 }
 
 .axisGray path {
-  fill: none;
+    fill: none;
     stroke: lightgray;
 }
 
-.axisBlue text{
-        font-family: 'Proxima-Nova', sans-serif;
+.axisBlue text {
+    font-family: 'Proxima-Nova', sans-serif;
     font-size: 13px;
     pointer-events: none;
     fill: #66ccff;
-    
+
 }
-.axisGray{
+
+.axisGray {
     fill: none;
     stroke: #666666;
     stroke-dasharray: 6px, 0px;
     shape-rendering: crispEdges;
     stroke-width: 1px;
 }
-.axisGray text{
+
+.axisGray text {
 
     font-family: 'Proxima-Nova', sans-serif;
     font-size: 13px;
     pointer-events: none;
     fill: #666666;
 }
-.axisGreen{
+
+.axisGreen {
     fill: none;
     stroke: #03C03C;
     stroke-dasharray: 6px, 0px;
     shape-rendering: crispEdges;
     stroke-width: 1px;
 }
-.axisGreen text{
-        font-family: 'Proxima-Nova', sans-serif;
+
+.axisGreen text {
+    font-family: 'Proxima-Nova', sans-serif;
     font-size: 13px;
     pointer-events: none;
     fill: #009966;
-        
+
 }
 
-.axisWhite{
+.axisWhite {
     fill: none;
     stroke: #666666;
     stroke-dasharray: 6px, 0px;
     shape-rendering: crispEdges;
     stroke-width: 1px;
 }
+
 .axisWhite path {
-  fill: none;
+    fill: none;
     stroke: lightgray;
 }
-.axisWhite text{
+
+.axisWhite text {
 
     font-family: 'Proxima-Nova', sans-serif;
     font-size: 13px;
@@ -147,49 +155,64 @@ body {
 
 .overlay {
     fill: gray;
-  pointer-events: all;
-      opacity: 0;
+    pointer-events: all;
+    opacity: 0;
 }
-.focus text{
-        fill: Blue;
+
+.focus text {
+    fill: Blue;
     font-size: 10px;
-    }
+}
 
 .focus1 rect {
-  fill: none;
-  stroke: green;
-  stroke-width: 1px;
+    fill: none;
+    stroke: green;
+    stroke-width: 1px;
     width: 7px;
     height: 7px;
-    
+
 }
+
 .focus circle {
-  fill: none;
-  stroke: steelblue;
-}  
-.hover-line {
-  stroke: #000000;
-  stroke-width: 1px;
-  
+    fill: none;
+    stroke: steelblue;
 }
-  .brush-handle {
+
+.hover-line {
+    stroke: #000000;
+    stroke-width: 1px;
+
+}
+
+.brush-handle {
     fill: #eee;
     stroke: #666;
-  }
-#legend2{
-    margin-left: 150px;
-    overflow:hidden;
 }
-.legend2 {
-        margin-left: 150px;
-    overflow:hidden;
 
-    float:left;
+#legend2 {
+    margin-left: 150px;
+    overflow: hidden;
+}
+
+.legend2 {
+    margin-left: 150px;
+    overflow: hidden;
+
+    float: left;
     margin-right: 1em;
 }
-.positive { background: #1F77B4;}
-.negetive { background: #03C03C;}
-.price { background: #666666;}
+
+.positive {
+    background: #1F77B4;
+}
+
+.negetive {
+    background: #03C03C;
+}
+
+.price {
+    background: #666666;
+}
 
 .key-dot {
     display: inline-block;
@@ -197,31 +220,32 @@ body {
     margin-right: .5em;
     width: 10px;
 }
-    #tooltip {
-      position: absolute;
-      width: 200px;
-      height: auto;
-      padding: 10px;
-      background-color: white;
-      -webkit-border-radius: 10px;
-      -moz-border-radius: 10px;
-      border-radius: 10px;
-      -webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
-      -moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
-      box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
-      pointer-events: none;
-    }
 
-    #tooltip.hidden {
-      display: none;
-    }
+#tooltip {
+    position: absolute;
+    width: 200px;
+    height: auto;
+    padding: 10px;
+    background-color: white;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    -webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+    -moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+    pointer-events: none;
+}
 
-    #tooltip p {
-      margin: 0;
-      font-family: Futura;
-      font-size: 16px;
-      line-height: 20px;
-    }
+#tooltip.hidden {
+    display: none;
+}
+
+#tooltip p {
+    margin: 0;
+    font-family: Futura;
+    font-size: 16px;
+    line-height: 20px;
+}
 
 
 

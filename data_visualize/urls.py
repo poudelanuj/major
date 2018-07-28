@@ -9,6 +9,8 @@ urlpatterns = [
     url(r'^candle',views.candle,name='candle'),
     url(r'^line',views.line,name='line'),
     url(r'^cf',views.cf,name='cf'),
+    url(r'^sentiment',views.sentiment,name='sentiment'),
+    url(r'^sentiline',views.sentiline,name='sentiline'),
 
 
 ]

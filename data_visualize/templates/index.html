@@ -21,48 +21,55 @@
 <br>
 
 <div class="container">
-    <h2>Data-Viz</h2>
-    <br>
-    <!-- Nav pills -->
-    <ul class="nav nav-pills" role="tablist">
-        <li class="nav-item">
-            <button class="nav-link active" data-toggle="pill" href="#home">Home</button>
-        </li>
-        <li class="nav-item">
-            <button class="nav-link" data-toggle="pill" onclick="location.href='candle';">Candle-chart
-            </button>
-        </li>
-        <li class="nav-item">
-            <button class="nav-link" data-toggle="pill" onclick="location.href='senti.html';">Sentiment-plot</button>
-        </li>
-    </ul>
+        <h2>Data-Viz</h2>
+        <br>
+        <!-- Nav pills -->
+        <ul class="nav nav-pills" role="tablist">
+            <li class="nav-item">
+                <button class="nav-link active" data-toggle="pill" href="#home">Home</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" data-toggle="pill" onclick="location.href='candle';">Candle-chart</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" data-toggle="pill" onclick="location.href='sentiment.html';">Sentiment-plot</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" data-toggle="pill" onclick="location.href='bubbleMarket.html';">Bubblecharts</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" data-toggle="pill" onclick="location.href='sentiment.html';">Crossfilter</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" data-toggle="pill" onclick="location.href='sentiline.html';">Sentiment-line</button>
+            </li>
 
-    <!-- Tab panes -->
-    <div class="tab-content">
-        <div id="home" class="container tab-pane active"><br>
-            <h3>Line-chart</h3>
-            <div id="chart">
 
-                <div id="figure"></div>
-                <div id="tooltip" class="hidden">
-                    <p><strong>Percentage Value</strong></p>
-                    <p><span id="value">100</span>%</p>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div id="home" class="container tab-pane active"><br>
+                <h3>Line-chart</h3>
+                <div id="chart">
+
+                    <div id="figure"></div>
+
                 </div>
 
-            </div>
+                <div id="chart2"></div>
 
-            <div id="chart2"></div>
-            <div id="legend2">
-                <div class="legend2">
-                    <p class="country-name"><span class="key-dot positive"></span>Market Cap</p>
+                <div id="legend2">
+                    <div class="legend2">
+                        <p class="country-name"><span class="key-dot positive"></span>Market Cap</p>
+                    </div>
+                    <div class="legend2">
+                        <p class="country-name"><span class="key-dot negetive"></span>Price(USD)</p>
+                    </div>
+                    <div class="legend2">
+                        <p class="country-name"><span class="key-dot price"></span>Price</p>
+                    </div>
                 </div>
-                <div class="legend2">
-                    <p class="country-name"><span class="key-dot negetive"></span>Price(USD)</p>
-                </div>
-                <div class="legend2">
-                    <p class="country-name"><span class="key-dot price"></span>Price</p>
-                </div>
-            </div>
 
 
             <script type="text/javascript">

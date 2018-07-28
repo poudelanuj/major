@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+{% load static %}
+<head>
+    <title>Data-viz</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <style>
+        body {
+            font-family: 'Helvetica Neue';
+            margin: 40px auto;
+            width: 960px;
+
+        }
+
+        #body {
+            position: relative;
+        }
+
+        .axis {
+            font: 10px sans-serif;
+        }
+
+        path {
+            stroke: steelblue;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        #legend2 {
+            margin-left: 150px;
+            overflow: hidden;
+        }
+
+        .legend2 {
+            float: left;
+            margin-right: 1em;
+        }
+
+        .positive {
+            background: #2CA02C;
+        }
+
+        .negetive {
+            background: #c21807;
+        }
+
+        .price {
+            background: #1F77B4;
+        }
+
+        .key-dot {
+            display: inline-block;
+            height: 10px;
+            margin-right: .5em;
+            width: 10px;
+        }
+
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke: grey;
+            shape-rendering: crispEdges;
+        }
+    </style>
+</head>
+
+<body>
+<br>
+<div class="container">
+    <h2>Data-Viz</h2>
+    <br>
+
+    <ul class="nav nav-pills" role="tablist">
+        <li class="nav-item">
+            <button class="nav-link" data-toggle="pill" onclick="location.href='index';">Home</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" data-toggle="pill" onclick="location.href='candle';">Candle-chart
+            </button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link active" data-toggle="pill" href="#">Sentiment-plot</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" data-toggle="pill" onclick="location.href='bubble';">Bubblecharts
+            </button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" data-toggle="pill" onclick="location.href='cf';">Crossfilter</button>
+
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" data-toggle="pill" onclick="location.href='sentiline.html';">Sentiment-line
+            </button>
+
+    </ul>
+
+
+    <div class="tab-content">
+        <div id="home" class="container tab-pane active"><br>
+            <h3>Sentiment-chart</h3>
+
+            <script src="http://d3js.org/d3.v3.min.js"></script>
+            <div id="legend2">
+                <div class="legend2">
+                    <p class="country-name"><span class="key-dot positive"></span>Positive</p>
+                </div>
+                <div class="legend2">
+                    <p class="country-name"><span class="key-dot negetive"></span>Negetive</p>
+                </div>
+                <!--    <div class="legend2">
+                        <p class="country-name"><span class="key-dot price"></span>Price</p>
+                    </div>
+            -->    </div>
+
+            <script>
+                var margin = {
+                        top: 20,
+                        right: 20,
+                        bottom: 70,
+                        left: 40
+                    },
+                    width = 1100 - margin.left - margin.right,
+                    height = 500 - margin.top - margin.bottom;
+
+                // Parse the date / time
+                var parseDate = d3.time.format("%d/%m/%Y").parse;
+
+                var x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
+
+                var barY = d3.scale.linear().range([height, 0]);
+
+                /*
+                    var y2 = d3.scale.linear().range([height, 0]);
+                */
+                var lineY = d3.scale.linear().range([height, 0])
+
+                var xAxis = d3.svg.axis()
+                    .scale(x)
+                    .orient("bottom")
+                    .tickFormat(d3.time.format("%Y-%b-%d"));
+
+                var bar_yAxis = d3.svg.axis()
+                    .scale(barY)
+                    .orient("left")
+                    .ticks(10);
+
+                var line_yAxis = d3.svg.axis()
+                    .scale(lineY)
+                    .orient("right")
+                    .ticks(10);
+                /*
+                        var valueline = d3.svg.line()
+                            .x(function(d) {
+                                return x(d.date);
+                            })
+                            .y(function(d) {
+                                return lineY(d.price)
+                            });
+                */
+
+
+                var svg = d3.select("body").append("svg")
+                    .attr("width", width + margin.left + margin.right + 100)
+                    .attr("height", height + margin.top + margin.bottom + 100)
+                    .append("g")
+                    .attr("transform",
+                        "translate(" + margin.left + "," + margin.top + ")");
+
+{#                d3.csv("senti.csv", function (error, data) {#}
+                    var data='{{ data }}';
+                    var data=JSON.parse(data.replace(/&quot;/g,'"'));
+                    data.forEach(function (d) {
+                        d.date = parseDate(d.date);
+                        d.positive = +d.positive;
+                        d.negetitve = +d.negetive;
+                        d.price = +d.price;
+                    });
+
+                    x.domain(data.map(function (d) {
+                        return d.date;
+                    }));
+                    barY.domain([0, d3.max(data, function (d) {
+                        return d.positive;
+                    })]);
+                    lineY.domain([0, d3.max(data, function (d) {
+                        return d.price;
+                    })]);
+
+
+                    svg.append("g")
+                        .attr("class", "x axis")
+                        .attr("transform", "translate(0," + height + ")")
+                        .call(xAxis)
+                        .selectAll("text")
+                        .style("text-anchor", "end")
+                        .attr("dx", "-.8em")
+                        .attr("dy", "-.55em")
+                        .attr("transform", "rotate(-90)");
+
+                    svg.append("g")
+                        .attr("class", "y axis").style("fill", "#2CA02C")
+                        .call(bar_yAxis)
+                        .append("text")
+                        .attr("transform", "rotate(-90)")
+                        .attr("y", -35)
+                        .attr("x", -150)
+                        .attr("dy", ".71em")
+                        .style("text-anchor", "end")
+                        .text("Sentiment value");
+
+
+                    svg.selectAll("bar")
+                        .data(data)
+                        .enter().append("rect")
+                        .style("fill", "#2CA02C")
+                        .attr("x", function (d) {
+                            return x(d.date) + 3;
+                        })
+                        .attr("width", 15)
+                        .attr("y", function (d) {
+                            return barY(d.positive);
+                        })
+                        .attr("height", function (d) {
+                            return height - barY(d.positive);
+                        });
+
+
+                    svg.selectAll("bar")
+                        .data(data)
+                        .enter().append("rect")
+                        .style("fill", "#c21807")
+                        .attr("x", function (d) {
+                            return x(d.date) + 18;
+                        })
+                        .attr("width", 15)
+                        .attr("y", function (d) {
+                            return barY(d.negetitve);
+                        })
+                        .attr("height", function (d) {
+                            return height - barY(d.negetive);
+                        });
+
+                    /*
+                                svg.append("path")
+                                    .attr("class", "line")
+                                    .style("stroke", "#1F77B4")
+                                    .data([data])
+                                    .attr("d", valueline).attr("transform", "translate(" + 17 + " ,0)");
+                                svg.append('g')
+                                    .attr('class', 'y axis').attr("transform", "translate(" + (width) + " ,0)").style("fill", "#1F77B4")
+                                    .call(line_yAxis)
+                                    .append("text")
+                                    .attr("transform", "rotate(-90)")
+                                    .attr("y", -20)
+                                    .attr("x", -150)
+                                    .attr("dy", ".71em")
+                                    .style("text-anchor", "end")
+                                    .text("Price");
+                    */
+
+
+
+
+            </script>
+        </div>
+    </div>
+</div>
+
+</body>
