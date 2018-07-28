@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <title>Data-viz</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+
+
+    <link rel=stylesheet type="text/css" href="{% static 'data_visualize/css/styles.css' %}">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+<br>
+
+<div class="container">
+    <h2>Data-Viz</h2>
+    <br>
+    <!-- Nav pills -->
+    <ul class="nav nav-pills" role="tablist">
+        <li class="nav-item">
+            <button class="nav-link active" data-toggle="pill" href="#home">Home</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" data-toggle="pill" onclick="location.href='candle';">Candle-chart
+            </button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" data-toggle="pill" onclick="location.href='senti.html';">Sentiment-plot</button>
+        </li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div id="home" class="container tab-pane active"><br>
+            <h3>Line-chart</h3>
+            <div id="chart">
+
+                <div id="figure"></div>
+                <div id="tooltip" class="hidden">
+                    <p><strong>Percentage Value</strong></p>
+                    <p><span id="value">100</span>%</p>
+                </div>
+
+            </div>
+
+            <div id="chart2"></div>
+            <div id="legend2">
+                <div class="legend2">
+                    <p class="country-name"><span class="key-dot positive"></span>Market Cap</p>
+                </div>
+                <div class="legend2">
+                    <p class="country-name"><span class="key-dot negetive"></span>Price(USD)</p>
+                </div>
+                <div class="legend2">
+                    <p class="country-name"><span class="key-dot price"></span>Price</p>
+                </div>
+            </div>
+
+
+            <script type="text/javascript">
+
+
+                var main = d3.select("#figure").append("svg").attr("width", 1300).attr("height", 500);
+
+
+                // set the dimensions and margins of the graph
+
+                var margin = {top: 120, right: 50, bottom: 10, left: 75},
+                    lineWidth = 1125 - margin.left - margin.right,
+                    lineHeight = 400 - margin.top - margin.bottom;
+                var margin1 = {top: 400, right: 50, bottom: 70, left: 75},
+                    barHeight = 540 - margin1.top - margin1.bottom;
+                var margin2 = {top: 0, right: 15, bottom: 30, left: 40},
+                    scrollHeight = 80 - margin2.top - margin2.bottom;
+                var scrollBar = d3.select("#chart2").append("svg")
+                    .attr("width", lineWidth + margin2.left + margin2.right + 200)
+                    .attr("height", scrollHeight + margin2.top + margin2.bottom)
+                    .append("g")
+                    .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
+
+
+                // parse the date / time
+                var parseTime = d3.timeParse("%d/%m/%Y")
+                bisectDate = d3.bisector(function (d) {
+                    return d.date;
+                }).left;
+                ;
+
+                // set the ranges
+                var xline = d3.scaleTime().range([0, lineWidth]);
+                var yline = d3.scaleLinear().range([lineHeight, 0]);
+                var yline2 = d3.scaleLinear().range([lineHeight, 0]);
+                var ybar = d3.scaleLinear().range([barHeight, 0]);
+                var xScroll = d3.scaleTime().range([0, lineWidth]),
+                    yScroll = d3.scaleLinear().range([(lineHeight + margin.top + margin.bottom + barHeight + margin1.bottom), 0]);
+                var x2 = d3.scaleTime().range([0, lineWidth]),
+                    y = d3.scaleLinear().range([scrollHeight, 0]),
+                    y2 = d3.scaleLinear().range([scrollHeight, 0]);
+                var xAxis2 = d3.axisBottom(x2),
+                    yAxis = d3.axisLeft(y);
+
+                var gBrush;
+
+
+                // define the market_capline
+                var lineBlue = d3.line()
+                    .x(function (d) {
+                        return xline(d.date);
+                    })
+                    .y(function (d) {
+                        return yline(d.market_cap);
+                    });
+                //define the priceline
+                var lineGreen = d3.line()
+                    .x(function (d) {
+                        return xline(d.date);
+                    })
+                    .y(function (d) {
+                        return yline2(d.open);
+                    });
+                var linechart = main.append("svg")
+                    .attr("width", lineWidth + margin.left + margin.right + 200)
+                    .attr("height", lineHeight + margin.top + margin.bottom)
+                    .append("g")
+                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+                var bar = main.append("svg")
+                    .attr("width", lineWidth + margin1.left + margin.right + 200)
+                    .attr("height", barHeight + margin1.top + margin1.bottom).append("g")
+                    .attr("transform", "translate(" + margin.left + "," + (margin1.top + margin.bottom) + ")");
+                var lineScroll = d3.line()
+                    .x(function (d) {
+                        return x2(d.date);
+                    })
+                    .y(function (d) {
+                        return y2(d.market_cap);
+                    });
+
+
+                var brushTool = scrollBar.append("g")
+                    .attr("class", "context")
+                    .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
+
+                var clip = main.append("defs").append("clipPath")
+                    .attr("id", "clip")
+                    .append("rect")
+                    .attr("width", lineWidth)
+                    .attr("height", lineHeight);
+
+                // gridlines in y axis
+                function make_y_gridlines() {
+                    return d3.axisLeft(yline)
+                        .ticks(3)
+                }
+
+                function make_y_gridlinesbar() {
+                    return d3.axisLeft(ybar)
+                        .ticks(2)
+                }
+
+                // Get the data
+                    var data='{{ data }}';
+
+                    var data=JSON.parse(data.replace(/&quot;/g,'"'));
+
+// format the data
+
+
+                    data.forEach(function (d) {
+
+
+                        d.date = parseTime(d.date);
+                        d.market_cap = +d.market_cap;
+                        d.open = +d.open;
+                        d.volume = +d.volume;
+                        console.log(d.volume);
+
+
+                    });
+
+// Scale the range of the data
+                    xline.domain(d3.extent(data, function (d) {
+                        return d.date;
+                    }));
+                    yline.domain([0, d3.max(data, function (d) {
+                        return d.market_cap;
+                    })]);
+                    yline2.domain([0, d3.max(data, function (d) {
+                        return d.open;
+                    })])
+                    ybar.domain([0, d3.max(data, function (d) {
+                        return d.volume;
+                    })]);
+                    4
+                    xScroll.domain(xline.domain());
+                    yScroll.domain(yline.domain());
+                    y.domain([0, d3.max(data, function (d) {
+                        return d.market_cap;
+                    })]);
+                    x2.domain(xline.domain());
+                    y2.domain(yline.domain());
+                    var brush = d3.brushX()
+                        .extent([[0, 0], [(lineWidth), (lineHeight)]])
+                        .on("brush end", brushed);
+
+
+                    linechart.append("path")
+                        .data([data])
+                        .attr("class", "lineBlue")
+                        .attr("d", lineBlue);
+
+
+                    linechart.append("path")
+                        .data([data])
+                        .attr("class", "lineGreen")
+                        .attr("d", lineGreen);
+
+                    // add the Y gridlines
+                    linechart.append("g")
+                        .attr("class", "grid")
+                        .call(make_y_gridlines()
+                            .tickSize(-lineWidth)
+                            .tickFormat("")
+                        );
+                    bar.append("g")
+                        .attr("class", "grid")
+                        .call(make_y_gridlinesbar()
+                            .tickSize(-lineWidth)
+                            .tickFormat("")
+                        );
+
+
+// Add the Y Axis
+                    linechart.append("g")
+                        .attr("class", "axisBlue")
+                        .append("text")
+                        .attr("transform", "rotate(-90)")
+                        .attr("x", (lineHeight - 380))
+                        .attr("y", (lineWidth - 1070))
+                        .attr("dy", "1.11em")
+                        .attr("text-anchor", "end")
+                        .text("Market Capital ");
+                    linechart.append("g")
+                        .attr("class", "axisGreen")
+                        .attr("transform", "translate( " + (lineWidth + 10) + ", 0 )")
+                        .append("text")
+                        .attr("transform", "rotate(-90)")
+                        .attr("x", (lineHeight - 450))
+                        .attr("y", (lineWidth - 960))
+                        .attr("dy", "1.11em")
+                        .attr("text-anchor", "middle")
+                        .text("Price (USD) ");
+
+                    bar.append("g")
+                        .attr("class", "axisWhite")
+                        .attr("transform", "translate(0," + (barHeight) + ")")
+                        .selectAll("text")
+                        .style("text-anchor", "end")
+                        .attr("dx", "1.0em")
+                        .attr("dy", "1.11em")
+                        .attr("transform", "rotate(0)");
+                    bar.append("g")
+                        .attr("class", "axisGray")
+                        .append("text")
+                        .attr("transform", "translate(" + -(margin.left * 0.8) + "," + ((barHeight / 2) - 20) + "), rotate(-90)")
+                        .style("text-anchor", "end")
+                        .text("Volume ");
+                    bar.selectAll("rect")
+                        .data(data)
+                        .enter()
+                        .append("rect");
+
+                    brushTool.append("path")
+                        .datum(data)
+                        .attr("class", "lineScroll")
+                        .attr("d", lineScroll);
+
+                    brushTool.append("g").attr("clip-path", "url(#clip)")
+                        .attr("class", "axis axis--x")
+                        .attr("transform", "translate(0," + scrollHeight + ")")
+                        .call(d3.axisBottom(xline));
+
+                    brushTool.append("g")
+                        .attr("class", "brush")
+                        .call(brush)
+                        .attr("opacity", 0.45)
+                        .call(brush.move, xline.range());
+
+                    gBrush = brushTool.append("g")
+                        .attr("class", "brush")
+                        .call(brush);
+
+                    gBrush.selectAll(".handle--custom")
+                        .data([{type: "w"}, {type: "e"}])
+                        .enter().append("path")
+                        .attr("class", "brush-handle")
+                        .attr("cursor", "ew-resize")
+                        .attr("d", resizePath)
+                        .style("display", "none");
+                    brushTool.selectAll(".brush-handle").style("display", "none");
+
+
+                    var focus = main.append("g")
+                        .attr("class", "focus")
+                        .style("display", "none");
+
+                    function brushed() {
+
+                        var brushScale = d3.event.selection || x2.range();
+                        xline.domain(brushScale.map(x2.invert, x2));
+                        var filteredData = data.filter(d=>d.date > xline.domain()[0] && d.date < xline.domain()[1]
+                    )
+                        ;
+                        yline2.domain([0, d3.max(filteredData, function (d) {
+                            return d.open;
+                        })]) &&
+                        yline.domain([0, d3.max(filteredData, function (d) {
+                            return d.market_cap;
+                        })]);
+                        ybar.domain([0, d3.max(filteredData, function (d) {
+                            return d.volume;
+                        })]);
+
+                        xline.domain(brushScale.map(x2.invert, x2));
+                        linechart.select(".lineBlue").attr("d", lineBlue);
+                        linechart.select(".lineGreen").attr("d", lineGreen);
+
+
+                        linechart.select(".axisBottom").call(d3.axisBottom(xline));
+                        linechart.select(".axisBlue").call(d3.axisLeft(yline).ticks(4).tickFormat(function (d) {
+                            if (d3.max(filteredData, function (d) {
+                                    return d.market_cap;
+                                }) > 1000000000) {
+                                return "$" + parseInt(d / 1e9) + "B";
+                            }
+                            else if (1000000000 > d3.max(filteredData, function (d) {
+                                    return d.market_cap;
+                                }) > 1000000) {
+                                return "$" + parseInt(d / 1e6) + "M";
+                            }
+                            else if (1000000 > d3.max(filteredData, function (d) {
+                                    return d.market_cap;
+                                }) > 1000) {
+                                return "$" + parseInt(d / 1e3) + "K";
+                            }
+                            else {
+                                return "$" + parseInt(d);
+                            }
+                        }));
+
+                        linechart.select(".axisGreen").call(d3.axisRight(yline2).ticks(4).tickFormat(function (d) {
+                            if (d3.max(filteredData, function (d) {
+                                    return d.open;
+                                }) > 1000) {
+                                return "$" + parseInt(d / 1000) + "k";
+                            } else {
+                                return "$" + parseInt(d);
+                            }
+                        }));
+                        bar.selectAll("rect")
+                            .attr("x", function (d) {
+                                return xline(d.date);
+                            }).attr("class", "bar")
+                            .attr("x", function (d) {
+                                return xline(d.date);
+                            })
+                            .attr("y", function (d) {
+                                return ybar(d.volume);
+                            })
+                            .attr("width", 2)
+                            .attr("height", function (d) {
+                                return barHeight - ybar(d.volume);
+                            }).append("title").text(function (d) {
+                            return d.date + "\n$" + d3.format(",")(d.volume);
+                        });
+
+                        bar.select(".axisGray").attr("transform", "translate( " + ", 0 )")
+                            .call(d3.axisLeft(ybar).ticks(2).tickFormat(function (d) {
+                                if (d3.max(filteredData, function (d) {
+                                        return d.volume;
+                                    }) > 1000000000) {
+                                    return "$" + parseInt(d / 1e9) + "B";
+                                }
+                                else {
+                                    return "$" + parseInt(d / 1e6) + "M";
+                                }
+
+                            }));
+                        bar.select(".axisWhite")
+                            .call(d3.axisBottom(xline).ticks(4));
+
+                        brushTool.selectAll(".brush-handle")
+                            .style("display", null)
+                            .attr("transform", function (d, i) {
+                                return "translate(" + brushScale[i] + ", 0)"
+                            });
+
+
+                    }
+
+                    function resizePath(d) {
+                        var e = +(d.type == "e"),
+                            x = e ? 1 : -1,
+                            y = scrollHeight / 2;
+                        return "M" + (.5 * x) + "," + y
+                            + "A6,6 0 0 " + e + " " + (6.5 * x) + "," + (y + 6)
+                            + "V" + (2 * y - 6)
+                            + "A6,6 0 0 " + e + " " + (.5 * x) + "," + (2 * y)
+                            + "Z"
+                            + "M" + (2.5 * x) + "," + (y + 8)
+                            + "V" + (2 * y - 8)
+                            + "M" + (4.5 * x) + "," + (y + 8)
+                            + "V" + (2 * y - 8);
+                    }
+
+                    focus.append("line")
+                        .attr("class", "x-hover-line hover-line")
+                        .attr("y1", 0)
+                        .attr("y2", 0);
+
+
+                    focus.append("circle")
+                        .attr("r", 4.5);
+//  focus.append("rect");
+
+                    focus.append("text")
+                        .attr("x", 10)
+                        .attr("dy", ".31em");
+
+                    main.append("rect")
+                        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+                        .attr("class", "overlay")
+                        .attr("width", lineWidth)
+                        .attr("height", lineHeight + margin1.bottom + margin.bottom + 10)
+                        .on("mouseover", function () {
+                            focus.style("display", null);
+                        })
+                        .on("mouseout", function () {
+                            focus.style("display", "none");
+                        })
+                        .on("mousemove", mousemove);
+
+                    function mousemove() {
+                        var x0 = xline.invert(d3.mouse(this)[0]),
+                            i = bisectDate(data, x0, 1),
+                            d0 = data[i - 1],
+                            d1 = data[i],
+                            d = x0 - d0.date > d1.date - x0 ? d1 : d0;
+
+                        focus.attr("transform", "translate(" + (xline(d.date) + margin.left) + "," + (yline(d.market_cap) + ybar(d.open) + margin1.bottom - margin.bottom - 10) + ")");
+
+
+                        focus.select("text").text(function () {
+                            message1 = d3.timeFormat("%d %b, %Y")(d.date);
+
+                            message2 = "market capital: $" + d3.format(",")(d.market_cap);
+                            message3 = "Price:$" + d3.format(",")(d.open);
+                            return message1 + message2 + message3;
+                        }).attr("x", -50).attr("y", -50)
+                        ;
+
+                        focus.select(".x-hover-line").attr("y2", lineHeight + barHeight + margin1.bottom);
+
+                    }
+
+
+
+            </script>
+        </div>
+
+    </div>
+</div>
+
+</body>
+
+</html>
