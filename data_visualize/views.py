@@ -45,3 +45,23 @@ def sentiline(request):
     data=pd.read_csv('data_visualize/data/sentiline.csv')
     data=data.to_json(orient='records')
     return render(request,'sentiline.html',{'data':data})
+
+
+def prediction(request):
+    data=pd.read_csv('data_visualize/data/prediction/RNN_bitcoin.csv')
+    data=data.to_json(orient='records')
+    return render(request,'prediction.html',{'data':data})
+
+
+def coin(request):
+    if request.method=='POST':
+        coin_name=request.POST.get('coin_name')
+        data=None
+        if coin_name=='bitcoin':
+            data=pd.read_csv('data_visualize/data/prediction/RNN_bitcoin.csv')
+        elif coin_name=='monero':
+            data=pd.read_csv('data_visualize/data/prediction/RNN_monero.csv')
+
+        data=data.to_json(orient='records')
+        print coin_name
+        return HttpResponse(data)

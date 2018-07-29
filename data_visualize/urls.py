@@ -11,6 +11,8 @@ urlpatterns = [
     url(r'^cf',views.cf,name='cf'),
     url(r'^sentiment',views.sentiment,name='sentiment'),
     url(r'^sentiline',views.sentiline,name='sentiline'),
+    url(r'^prediction',views.prediction,name='prediction'),
+    url(r'^coin',views.coin,name='coin'),
 
 
 ]

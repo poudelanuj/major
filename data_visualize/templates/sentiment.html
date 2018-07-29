@@ -14,13 +14,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <style>
-        body {
-            font-family: 'Helvetica Neue';
-            margin: 40px auto;
-            width: 960px;
-
-        }
-
         #body {
             position: relative;
         }
@@ -64,6 +57,30 @@
             width: 10px;
         }
 
+        .topnav {
+            overflow: hidden;
+            background-color: #333;
+        }
+
+        .topnav a {
+            float: left;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 22px;
+        }
+
+        .topnav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .topnav a.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
         .axis path,
         .axis line {
             fill: none;
@@ -74,33 +91,25 @@
 </head>
 
 <body>
+<div class="topnav">
+    <a href="index">Visualization</a>
+    <a href="prediction">Price Prediction</a>
+    <a class="active" href="#">Sentiment Analysis</a>
+    <a href="#about">About</a>
+</div>
 <br>
 <div class="container">
     <h2>Data-Viz</h2>
     <br>
 
     <ul class="nav nav-pills" role="tablist">
-        <li class="nav-item">
-            <button class="nav-link" data-toggle="pill" onclick="location.href='index';">Home</button>
-        </li>
-        <li class="nav-item">
-            <button class="nav-link" data-toggle="pill" onclick="location.href='candle';">Candle-chart
-            </button>
-        </li>
+
         <li class="nav-item">
             <button class="nav-link active" data-toggle="pill" href="#">Sentiment-plot</button>
         </li>
-        <li class="nav-item">
-            <button class="nav-link" data-toggle="pill" onclick="location.href='bubble';">Bubblecharts
-            </button>
-        </li>
-        <li class="nav-item">
-            <button class="nav-link" data-toggle="pill" onclick="location.href='cf';">Crossfilter</button>
 
-        </li>
         <li class="nav-item">
-            <button class="nav-link" data-toggle="pill" onclick="location.href='sentiline.html';">Sentiment-line
-            </button>
+            <button class="nav-link" data-toggle="pill" onclick="location.href='sentiline';">Sentiment-line</button>
 
     </ul>
 
@@ -117,163 +126,163 @@
                 <div class="legend2">
                     <p class="country-name"><span class="key-dot negetive"></span>Negetive</p>
                 </div>
-                <!--    <div class="legend2">
-                        <p class="country-name"><span class="key-dot price"></span>Price</p>
-                    </div>
-            -->    </div>
+            </div>
+            <!--    <div class="legend2">
+                    <p class="country-name"><span class="key-dot price"></span>Price</p>
+                </div>
+        -->    </div>
 
-            <script>
-                var margin = {
-                        top: 20,
-                        right: 20,
-                        bottom: 70,
-                        left: 40
-                    },
-                    width = 1100 - margin.left - margin.right,
-                    height = 500 - margin.top - margin.bottom;
+        <script>
+            var margin = {
+                    top: 20,
+                    right: 20,
+                    bottom: 70,
+                    left: 40
+                },
+                width = 1100 - margin.left - margin.right,
+                height = 500 - margin.top - margin.bottom;
 
-                // Parse the date / time
-                var parseDate = d3.time.format("%d/%m/%Y").parse;
+            // Parse the date / time
+            var parseDate = d3.time.format("%d/%m/%Y").parse;
 
-                var x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
+            var x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
 
-                var barY = d3.scale.linear().range([height, 0]);
+            var barY = d3.scale.linear().range([height, 0]);
 
-                /*
-                    var y2 = d3.scale.linear().range([height, 0]);
-                */
-                var lineY = d3.scale.linear().range([height, 0])
+            /*
+                var y2 = d3.scale.linear().range([height, 0]);
+            */
+            var lineY = d3.scale.linear().range([height, 0])
 
-                var xAxis = d3.svg.axis()
-                    .scale(x)
-                    .orient("bottom")
-                    .tickFormat(d3.time.format("%Y-%b-%d"));
+            var xAxis = d3.svg.axis()
+                .scale(x)
+                .orient("bottom")
+                .tickFormat(d3.time.format("%Y-%b-%d"));
 
-                var bar_yAxis = d3.svg.axis()
-                    .scale(barY)
-                    .orient("left")
-                    .ticks(10);
+            var bar_yAxis = d3.svg.axis()
+                .scale(barY)
+                .orient("left")
+                .ticks(10);
 
-                var line_yAxis = d3.svg.axis()
-                    .scale(lineY)
-                    .orient("right")
-                    .ticks(10);
-                /*
-                        var valueline = d3.svg.line()
-                            .x(function(d) {
-                                return x(d.date);
-                            })
-                            .y(function(d) {
-                                return lineY(d.price)
-                            });
-                */
-
-
-                var svg = d3.select("body").append("svg")
-                    .attr("width", width + margin.left + margin.right + 100)
-                    .attr("height", height + margin.top + margin.bottom + 100)
-                    .append("g")
-                    .attr("transform",
-                        "translate(" + margin.left + "," + margin.top + ")");
-
-{#                d3.csv("senti.csv", function (error, data) {#}
-                    var data='{{ data }}';
-                    var data=JSON.parse(data.replace(/&quot;/g,'"'));
-                    data.forEach(function (d) {
-                        d.date = parseDate(d.date);
-                        d.positive = +d.positive;
-                        d.negetitve = +d.negetive;
-                        d.price = +d.price;
-                    });
-
-                    x.domain(data.map(function (d) {
-                        return d.date;
-                    }));
-                    barY.domain([0, d3.max(data, function (d) {
-                        return d.positive;
-                    })]);
-                    lineY.domain([0, d3.max(data, function (d) {
-                        return d.price;
-                    })]);
-
-
-                    svg.append("g")
-                        .attr("class", "x axis")
-                        .attr("transform", "translate(0," + height + ")")
-                        .call(xAxis)
-                        .selectAll("text")
-                        .style("text-anchor", "end")
-                        .attr("dx", "-.8em")
-                        .attr("dy", "-.55em")
-                        .attr("transform", "rotate(-90)");
-
-                    svg.append("g")
-                        .attr("class", "y axis").style("fill", "#2CA02C")
-                        .call(bar_yAxis)
-                        .append("text")
-                        .attr("transform", "rotate(-90)")
-                        .attr("y", -35)
-                        .attr("x", -150)
-                        .attr("dy", ".71em")
-                        .style("text-anchor", "end")
-                        .text("Sentiment value");
-
-
-                    svg.selectAll("bar")
-                        .data(data)
-                        .enter().append("rect")
-                        .style("fill", "#2CA02C")
-                        .attr("x", function (d) {
-                            return x(d.date) + 3;
+            var line_yAxis = d3.svg.axis()
+                .scale(lineY)
+                .orient("right")
+                .ticks(10);
+            /*
+                    var valueline = d3.svg.line()
+                        .x(function(d) {
+                            return x(d.date);
                         })
-                        .attr("width", 15)
-                        .attr("y", function (d) {
-                            return barY(d.positive);
-                        })
-                        .attr("height", function (d) {
-                            return height - barY(d.positive);
+                        .y(function(d) {
+                            return lineY(d.price)
                         });
+            */
 
 
-                    svg.selectAll("bar")
-                        .data(data)
-                        .enter().append("rect")
-                        .style("fill", "#c21807")
-                        .attr("x", function (d) {
-                            return x(d.date) + 18;
-                        })
-                        .attr("width", 15)
-                        .attr("y", function (d) {
-                            return barY(d.negetitve);
-                        })
-                        .attr("height", function (d) {
-                            return height - barY(d.negetive);
-                        });
+            var svg = d3.select("body").append("svg")
+                .attr("width", width + margin.left + margin.right + 100)
+                .attr("height", height + margin.top + margin.bottom + 100)
+                .append("g")
+                .attr("transform",
+                    "translate(" + margin.left + "," + margin.top + ")");
 
-                    /*
-                                svg.append("path")
-                                    .attr("class", "line")
-                                    .style("stroke", "#1F77B4")
-                                    .data([data])
-                                    .attr("d", valueline).attr("transform", "translate(" + 17 + " ,0)");
-                                svg.append('g')
-                                    .attr('class', 'y axis').attr("transform", "translate(" + (width) + " ,0)").style("fill", "#1F77B4")
-                                    .call(line_yAxis)
-                                    .append("text")
-                                    .attr("transform", "rotate(-90)")
-                                    .attr("y", -20)
-                                    .attr("x", -150)
-                                    .attr("dy", ".71em")
-                                    .style("text-anchor", "end")
-                                    .text("Price");
-                    */
+            {#                d3.csv("senti.csv", function (error, data) {#}
+            var data = '{{ data }}';
+            var data = JSON.parse(data.replace(/&quot;/g, '"'));
+            data.forEach(function (d) {
+                d.date = parseDate(d.date);
+                d.positive = +d.positive;
+                d.negetitve = +d.negetive;
+                d.price = +d.price;
+            });
+
+            x.domain(data.map(function (d) {
+                return d.date;
+            }));
+            barY.domain([0, d3.max(data, function (d) {
+                return d.positive;
+            })]);
+            lineY.domain([0, d3.max(data, function (d) {
+                return d.price;
+            })]);
 
 
+            svg.append("g")
+                .attr("class", "x axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(xAxis)
+                .selectAll("text")
+                .style("text-anchor", "end")
+                .attr("dx", "-.8em")
+                .attr("dy", "-.55em")
+                .attr("transform", "rotate(-90)");
+
+            svg.append("g")
+                .attr("class", "y axis").style("fill", "#2CA02C")
+                .call(bar_yAxis)
+                .append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("y", -35)
+                .attr("x", -150)
+                .attr("dy", ".71em")
+                .style("text-anchor", "end")
+                .text("Sentiment value");
 
 
-            </script>
-        </div>
+            svg.selectAll("bar")
+                .data(data)
+                .enter().append("rect")
+                .style("fill", "#2CA02C")
+                .attr("x", function (d) {
+                    return x(d.date) + 3;
+                })
+                .attr("width", 15)
+                .attr("y", function (d) {
+                    return barY(d.positive);
+                })
+                .attr("height", function (d) {
+                    return height - barY(d.positive);
+                });
+
+
+            svg.selectAll("bar")
+                .data(data)
+                .enter().append("rect")
+                .style("fill", "#c21807")
+                .attr("x", function (d) {
+                    return x(d.date) + 18;
+                })
+                .attr("width", 15)
+                .attr("y", function (d) {
+                    return barY(d.negetitve);
+                })
+                .attr("height", function (d) {
+                    return height - barY(d.negetive);
+                });
+
+
+            /*
+                        svg.append("path")
+                            .attr("class", "line")
+                            .style("stroke", "#1F77B4")
+                            .data([data])
+                            .attr("d", valueline).attr("transform", "translate(" + 17 + " ,0)");
+                        svg.append('g')
+                            .attr('class', 'y axis').attr("transform", "translate(" + (width) + " ,0)").style("fill", "#1F77B4")
+                            .call(line_yAxis)
+                            .append("text")
+                            .attr("transform", "rotate(-90)")
+                            .attr("y", -20)
+                            .attr("x", -150)
+                            .attr("dy", ".71em")
+                            .style("text-anchor", "end")
+                            .text("Price");
+            */
+
+
+        </script>
     </div>
+</div>
 </div>
 
 </body>

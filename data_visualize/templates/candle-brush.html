@@ -11,16 +11,57 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
     <script src="http://d3js.org/d3.v4.min.js"></script>
-    <link rel=stylesheet type="text/css" href="{% static 'data_visualize/css/candle.css' %}">
+
+
+    <style>
+        #body {
+            position: relative;
+        }
+
+        .topnav {
+            width: 100%;
+            overflow: hidden;
+            position: absolute;
+            top: 0;
+            left: 0;
+            /* Position the navbar at the top of the page */
+            width: 100%;
+            background-color: #333;
+        }
+
+        .topnav a {
+            float: left;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 22px;
+        }
+
+        .topnav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .topnav a.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
 
 
 </head>
 
 <body>
-<div style="width:800px; margin:0 auto;">
-    centered content
-</div>
+<div class="topnav">
 
+
+    <a class="active" href="#home">Visualization</a>
+    <a href="#Price">Price Prediction</a>
+    <a href="sentiline.html">Sentiment Analysis</a>
+    <a href="#about">About</a>
+
+</div>
 <br>
 
 <div class="container">
@@ -29,33 +70,28 @@
     <!-- Nav pills -->
     <ul class="nav nav-pills" role="tablist">
         <li class="nav-item">
-            <button class="nav-link" data-toggle="pill" onclick="location.href='index.html';">Home</button>
+            <button class="nav-link" data-toggle="pill" onclick="location.href='index';">Home</button>
         </li>
         <li class="nav-item">
             <button class="nav-link active" data-toggle="pill" href="#">Candle-chart</button>
         </li>
+
         <li class="nav-item">
-            <button class="nav-link" data-toggle="pill" onclick="location.href='sentiment.html';">Sentiment-plot</button>
+            <button class="nav-link" data-toggle="pill" onclick="location.href='bubble';">Bubblecharts
+            </button>
         </li>
         <li class="nav-item">
-            <button class="nav-link" data-toggle="pill" onclick="location.href='bubbleMarket.html';">Bubblecharts</button>
-        </li>
-        <li class="nav-item">
-            <button class="nav-link" data-toggle="pill" onclick="location.href='crossfilter.html';">Crossfilter</button>
-        </li>
-        <li class="nav-item">
-            <button class="nav-link" data-toggle="pill" onclick="location.href='sentiline.html';">Sentiment-line</button>
+            <button class="nav-link" data-toggle="pill" onclick="location.href='cf';">Crossfilter</button>
         </li>
 
 
     </ul>
 
-
     <!-- Tab panes -->
     <div class="tab-content">
         <div id="home" class="container tab-pane active"><br>
-            <h3>Candle-Chart</h3>
-
+            <h3>Candle -chart</h3>
+            <link rel=stylesheet type="text/css" href="{% static 'data_visualize/css/candle.css' %}">
 
             <script src="{% static 'data_visualize/js/techan.min.js' %}"></script>
             <script>

@@ -9,18 +9,55 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
     <script src="https://d3js.org/d3.v4.min.js"></script>
 
-
     <link rel=stylesheet type="text/css" href="{% static 'data_visualize/css/styles.css' %}">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+
+    <style>
+        .topnav {
+            overflow: hidden;
+            background-color: #333;
+        }
+
+        .topnav a {
+            float: left;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 22px;
+        }
+
+        .topnav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .topnav a.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+
 </head>
 
 <body>
 <br>
 
-<div class="container">
+<body>
+
+    <div class="topnav">
+        <a class="active" href="#home">Visualization</a>
+        <a href="#Price">Price Prediction</a>
+        <a href="sentiline">Sentiment Analysis</a>
+        <a href="#about">About</a>
+    </div>
+
+    <br>
+
+    <div class="container">
         <h2>Data-Viz</h2>
         <br>
         <!-- Nav pills -->
@@ -31,17 +68,12 @@
             <li class="nav-item">
                 <button class="nav-link" data-toggle="pill" onclick="location.href='candle';">Candle-chart</button>
             </li>
+
             <li class="nav-item">
-                <button class="nav-link" data-toggle="pill" onclick="location.href='sentiment.html';">Sentiment-plot</button>
+                <button class="nav-link" data-toggle="pill" onclick="location.href='bubble';">Bubblecharts</button>
             </li>
             <li class="nav-item">
-                <button class="nav-link" data-toggle="pill" onclick="location.href='bubbleMarket.html';">Bubblecharts</button>
-            </li>
-            <li class="nav-item">
-                <button class="nav-link" data-toggle="pill" onclick="location.href='sentiment.html';">Crossfilter</button>
-            </li>
-            <li class="nav-item">
-                <button class="nav-link" data-toggle="pill" onclick="location.href='sentiline.html';">Sentiment-line</button>
+                <button class="nav-link" data-toggle="pill" onclick="location.href='cf';">Crossfilter</button>
             </li>
 
 
@@ -71,8 +103,7 @@
                     </div>
                 </div>
 
-
-            <script type="text/javascript">
+        <script type="text/javascript">
 
 
                 var main = d3.select("#figure").append("svg").attr("width", 1300).attr("height", 500);
