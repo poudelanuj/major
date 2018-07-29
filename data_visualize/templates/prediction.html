@@ -12,6 +12,32 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
     <style>
+
+        .topnav {
+            overflow: hidden;
+            background-color: #333;
+
+        }
+
+        .topnav a {
+            float: left;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 22px;
+        }
+
+        .topnav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .topnav a.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
         body {
             font: 10px sans-serif;
             background-color: white;;
@@ -142,6 +168,13 @@
             <option value="bitcoin" name="bitcoin">Bitcoin</option>
             <option value="ethereum" name="ethereum">Ethereum</option>
             <option value="monero" name="monero">Monero</option>
+            <option value="litecoin" name="litecoin">Litecoin</option>
+            <option value="dash" name="dash">Dash</option>
+            <option value="bitcoincash" name="bitcoincash">Bitcoin Cash</option>
+            <option value="eos" name="eos">Eos</option>
+            <option value="neo" name="neo">Neo</option>
+            <option value="nano" name="nano">Nano</option>
+            <option value="iota" name="iota">Iota</option>
         </select>
 
 
@@ -159,8 +192,8 @@
                     success: function (new_data) {
                         console.log('success')
                         new_data=JSON.parse(new_data);
-                        console.log(new_data);
-                        drawChart(new_data);
+                        console.log(coin_name);
+                        drawChart(new_data,coin_name);
                     },
                     error: function (ts) {
                         console.log('error')
@@ -174,9 +207,9 @@
         var data = '{{ data }}';
         var data = JSON.parse(data.replace(/&quot;/g, '"'));
         console.log(data);
-        drawChart(data)
+        drawChart(data,'bitcoin')
 
-        function drawChart(data) {
+        function drawChart(data,coin_name) {
             d3.select("svg").remove();
 
 
@@ -189,7 +222,7 @@
             main_height = 500 - main_margin.top - main_margin.bottom,
             mini_height = 500 - mini_margin.top - mini_margin.bottom;
         //Date formatter variable
-        var formatDate = d3.time.format("%d/%m/%Y"),
+        var formatDate = d3.time.format("%Y-%m-%d"),
             parseDate = formatDate.parse,
             bisectDate = d3.bisector(function (d) {
                 return d.Date;
@@ -407,7 +440,7 @@
                 .style("font-color", "Green")
                 .style("stroke", "Green")
 
-                .text("Bitcoin(USD)");
+                .text(coin_name+"(USD)");
             //Only display the right Y axis if the volume data is present
             /*
               if (pathes[3].visible) {

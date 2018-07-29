@@ -59,8 +59,25 @@ def coin(request):
         data=None
         if coin_name=='bitcoin':
             data=pd.read_csv('data_visualize/data/prediction/RNN_bitcoin.csv')
+        elif coin_name=='ethereum':
+            data = pd.read_csv('data_visualize/data/prediction/RNN_ethereum.csv')
         elif coin_name=='monero':
             data=pd.read_csv('data_visualize/data/prediction/RNN_monero.csv')
+        elif coin_name=='litecoin':
+            data=pd.read_csv('data_visualize/data/prediction/RNN_litecoin.csv')
+        elif coin_name=='dash':
+            data=pd.read_csv('data_visualize/data/prediction/RNN_dash.csv')
+        elif coin_name=='bitcoincash':
+            data=pd.read_csv('data_visualize/data/prediction/RNN_bitcoin-cash.csv')
+        elif coin_name=='eos':
+            data=pd.read_csv('data_visualize/data/prediction/RNN_eos.csv')
+        elif coin_name=='neo':
+            data=pd.read_csv('data_visualize/data/prediction/RNN_neo.csv')
+        elif coin_name=='nano':
+            data=pd.read_csv('data_visualize/data/prediction/RNN_nano.csv')
+        elif coin_name=='iota':
+            data=pd.read_csv('data_visualize/data/prediction/RNN_iota.csv')
+
 
         data=data.to_json(orient='records')
         print coin_name
